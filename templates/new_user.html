@@ -1,0 +1,45 @@
+<h2 class="title">
+      To use Gathered, provide details for connects to reach you on :) <br>
+      {{user | json}}
+    </h2>
+    <form>
+      <ion-item>
+        <ion-label fixed>Name</ion-label>
+        <input type="text" name="name" ng-model="user.name"></input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label fixed>City</ion-label>
+        <input type="text" name="city" ng-model="user.city"></input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label fixed>Bio</ion-label>
+        <textarea elastic ng-model="user.bio"></textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-label fixed>Phone</ion-label>
+        <input type="text" name="phone" ng-model="user.phone"></input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label fixed>Email</ion-label>
+        <input type="text" name="email" ng-model="user.email"></input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label fixed>Twitter @</ion-label>
+        <input type="text" name="twitter" ng-model="user.twitter"></input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label fixed>Facebook Username</ion-label>
+        <input type="text" name="facebook" ng-model="user.facebook"></input>
+      </ion-item>
+
+      <div padding class="exists">
+        <button color="danger" ng-click="addProfile()" block>SAVE PROFILE</button>
+      </div>
+    </ion-list>
+  </form>
