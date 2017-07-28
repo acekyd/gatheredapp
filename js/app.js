@@ -33,7 +33,7 @@ gathered.config(function($stateProvider, $urlRouterProvider) {
 
 gathered.controller("LoginController", function($scope) {
     $scope.login = function() {
-        window.location.href = "https://secure.meetup.com/oauth2/authorize?client_id=cqcli029e5mf174b32fqdetvs7&response_type=token&redirect_uri=http://127.0.0.1:8080/callback.html&scope=ageless"
+        window.location.href = "https://secure.meetup.com/oauth2/authorize?client_id=i11g0qhdo95ddaig8dg4chhah5&response_type=token&redirect_uri=http://gatheredapp.co/callback.html&scope=ageless"
     }
 
 });
@@ -41,9 +41,9 @@ gathered.controller("LoginController", function($scope) {
 gathered.controller("HomeController", function($scope, meetupService, $firebaseObject, $state) {
 
     meetupService.loadUser().then(function(user) {
-        window.localStorage.setItem('user', JSON.stringify(user.data));
+
         const rootRef = firebase.database().ref().child('users');
-        const ref = rootRef.child(user.data.id+"_test");
+        const ref = rootRef.child(user.data.id);
         $scope.user = $firebaseObject(ref);
 
         $scope.user.$loaded().then(function() {
@@ -51,21 +51,30 @@ gathered.controller("HomeController", function($scope, meetupService, $firebaseO
             //Making check to confirm user does not exist then redirect to new user page.
             if(typeof $scope.user.$value !== 'undefined')
             {
-                 $state.go('new');
+                window.localStorage.setItem('user', JSON.stringify(user.data));
+                $state.go('new');
             }
         });
+    })
 
+    meetupService.loadDashboard().then(function(dashboard) {
+        $scope.dashboard = dashboard;
     })
 });
 
-gathered.controller("NewUserController", function($scope, $firebaseArray) {
+gathered.controller("NewUserController", function($scope, $firebaseObject, $state) {
     $scope.user = JSON.parse(window.localStorage.getItem("user"));
-    const ref = firebase.database().ref().child('users');
-    $scope.fb_user = $firebaseArray(ref);
+    const ref = firebase.database().ref().child('users').child($scope.user.id+"_test");
+    $scope.fb_user = $firebaseObject(ref);
 
     $scope.addProfile = function() {
-        $scope.fb_user.$add($scope.user).then(function() {
+        //$scope.fb_user.push($scope.user);
+        $scope.fb_user.$ref().set($scope.user).then(function() {
             alert("Saved");
+            //Show toast
+            window.localStorage.setItem('user', JSON.stringify($scope.user));
+            $state.go('home');
+
         }).catch(function(error) {
             alert('Error!');
           });
